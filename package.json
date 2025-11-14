@@ -2,7 +2,7 @@
   "name": "bili-up-extension",
   "description": "YouTube视频信息发送器 - 发送YouTube视频信息到后端服务器",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "wxt",
