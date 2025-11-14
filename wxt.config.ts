@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     name: 'Bili UP Extension',
     description: '保存 YouTube/Bilibili 视频 URL 和字幕的浏览器扩展',
-    version: '1.0.2',
+    version: '1.0.3',
     permissions: [
       'storage',
       'activeTab',

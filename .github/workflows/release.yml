@@ -127,6 +127,5 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          dist/bili-up-extension-${{ steps.package-version.outputs.version }}-chrome.zip
-          dist/bili-up-extension-${{ steps.package-version.outputs.version }}-firefox.zip
+          dist/*.zip
         fail_on_unmatched_files: false
