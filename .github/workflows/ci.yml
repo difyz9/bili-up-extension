@@ -17,11 +17,14 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'yarn'
         
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: |
+        yarn cache clean
+        rm -rf node_modules
+        yarn install --network-timeout 100000
       
     - name: Type check
       run: yarn compile

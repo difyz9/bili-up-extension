@@ -1,9 +1,6 @@
-name: Build and Release
+name: Build and Release (NPM)
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -20,33 +17,30 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'yarn'
         
     - name: Debug environment
       run: |
         echo "Node.js version: $(node --version)"
         echo "npm version: $(npm --version)"
-        echo "yarn version: $(yarn --version)"
         echo "Current directory: $(pwd)"
         ls -la
         
-    - name: Install dependencies
+    - name: Install dependencies with npm
       run: |
-        yarn cache clean
-        rm -rf node_modules
-        yarn install --network-timeout 100000
-      
+        rm -rf node_modules package-lock.json yarn.lock
+        npm install
+        
     - name: Build Chrome extension
-      run: yarn build
+      run: npm run build
       
     - name: Build Firefox extension
-      run: yarn build:firefox
+      run: npm run build:firefox
       
     - name: Create Chrome zip
-      run: yarn zip
+      run: npm run zip
       
     - name: Create Firefox zip
-      run: yarn zip:firefox
+      run: npm run zip:firefox
       
     - name: Get package version
       id: package-version
@@ -62,10 +56,12 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref_name }}
-        name: Release ${{ github.ref_name }}
+        tag_name: v${{ steps.package-version.outputs.version }}-npm
+        name: Release v${{ steps.package-version.outputs.version }} (NPM Build)
         body: |
-          ## 🚀 Bili UP Extension ${{ github.ref_name }}
+          ## 🚀 Bili UP Extension v${{ steps.package-version.outputs.version }}
+          
+          **This is a manual NPM build release**
           
           ### ✨ 功能特性
           - 🎬 支持 YouTube 和 Bilibili 视频信息保存
@@ -77,29 +73,8 @@ jobs:
           - **Chrome 版本**: 兼容 Chromium 内核浏览器 (Chrome, Edge, 等)
           - **Firefox 版本**: 专为 Firefox 浏览器优化
           
-          ### 🛠 安装方法
-          
-          #### Chrome/Edge 安装
-          1. 下载 `bili-up-extension-*-chrome.zip`
-          2. 解压缩文件
-          3. 打开浏览器扩展管理页面
-          4. 启用"开发者模式"
-          5. 点击"加载已解压的扩展程序"，选择解压后的文件夹
-          
-          #### Firefox 安装
-          1. 下载 `bili-up-extension-*-firefox.zip`
-          2. 打开 Firefox，访问 `about:debugging`
-          3. 点击"此 Firefox"
-          4. 点击"临时载入附加组件"
-          5. 选择下载的 zip 文件
-          
-          ### 📋 更新日志
-          - 版本号: v${{ steps.package-version.outputs.version }}
-          - 构建时间: ${{ github.event.head_commit.timestamp }}
-          
         draft: false
-        prerelease: false
+        prerelease: true
         files: |
-          .output/youtube-video-sender-${{ steps.package-version.outputs.version }}-chrome.zip
-          .output/youtube-video-sender-${{ steps.package-version.outputs.version }}-firefox.zip
-        fail_on_unmatched_files: true
+          .output/*.zip
+        fail_on_unmatched_files: false
