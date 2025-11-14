@@ -121,12 +121,12 @@ jobs:
           5. 选择下载的 zip 文件
           
           ### 📋 更新日志
-          - 版本号: v${{ steps.package-versiondists.version }}
+          - 版本号: v${{ steps.package-version.dists.version }}
           - 构建时间: ${{ github.event.head_commit.timestamp }}
           
         draft: false
         prerelease: false
         files: |
-          dist/bili-up-extension-${{ steps.package-versiondists.version }}-chrome.zip
-          dist/bili-up-extension-${{ steps.package-versiondists.version }}-firefox.zip
+          dist/bili-up-extension-${{ steps.package-version.dists.version }}-chrome.zip
+          dist/bili-up-extension-${{ steps.package-version.dists.version }}-firefox.zip
         fail_on_unmatched_files: true
