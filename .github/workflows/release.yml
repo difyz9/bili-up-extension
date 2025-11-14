@@ -37,27 +37,54 @@ jobs:
         yarn install --network-timeout 100000
       
     - name: Build Chrome extension
-      run: yarn build
-      
+      run: |
+        yarn build
+        echo "Chrome build completed"
+        
     - name: Build Firefox extension
-      run: yarn build:firefox
-      
+      run: |
+        yarn build:firefox
+        echo "Firefox build completed"
+        
+    - name: Check build output
+      run: |
+        echo "Checking build output directory:"
+        if [ -d ".output" ]; then
+          echo ".output directory exists"
+          ls -la .output/
+        else
+          echo ".output directory does not exist"
+          echo "Checking for other possible output directories:"
+          find . -maxdepth 2 -type d -name "*dist*" -o -name "*build*" -o -name "*output*"
+        fi
+        
     - name: Create Chrome zip
-      run: yarn zip
-      
+      run: |
+        yarn zip
+        echo "Chrome zip created"
+        
     - name: Create Firefox zip
-      run: yarn zip:firefox
-      
+      run: |
+        yarn zip:firefox
+        echo "Firefox zip created"
+        
     - name: Get package version
       id: package-version
       run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       
     - name: List zip files
       run: |
-        echo "Extension files:"
-        ls -la .output/
-        echo "Looking for zip files:"
-        find .output -name "*.zip" -type f
+        echo "Final output check:"
+        if [ -d ".output" ]; then
+          echo "Contents of .output directory:"
+          ls -la .output/
+          echo "Looking for zip files:"
+          find .output -name "*.zip" -type f
+        else
+          echo "ERROR: .output directory not found!"
+          echo "Searching for zip files in current directory:"
+          find . -name "*.zip" -type f
+        fi
       
     - name: Create Release
       uses: softprops/action-gh-release@v1
