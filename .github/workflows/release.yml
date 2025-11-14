@@ -49,11 +49,11 @@ jobs:
     - name: Check build output
       run: |
         echo "Checking build output directory:"
-        if [ -d ".output" ]; then
-          echo ".output directory exists"
-          ls -la .output/
+        if [ -d "dist" ]; then
+          echo "dist directory exists"
+          ls -la dist/
         else
-          echo ".output directory does not exist"
+          echo "dist directory does not exist"
           echo "Checking for other possible output directories:"
           find . -maxdepth 2 -type d -name "*dist*" -o -name "*build*" -o -name "*output*"
         fi
@@ -75,13 +75,13 @@ jobs:
     - name: List zip files
       run: |
         echo "Final output check:"
-        if [ -d ".output" ]; then
-          echo "Contents of .output directory:"
-          ls -la .output/
+        if [ -d "dist" ]; then
+          echo "Contents of dist directory:"
+          ls -la dist/
           echo "Looking for zip files:"
-          find .output -name "*.zip" -type f
+          find dist -name "*.zip" -type f
         else
-          echo "ERROR: .output directory not found!"
+          echo "ERROR: dist directory not found!"
           echo "Searching for zip files in current directory:"
           find . -name "*.zip" -type f
         fi
@@ -121,12 +121,12 @@ jobs:
           5. 选择下载的 zip 文件
           
           ### 📋 更新日志
-          - 版本号: v${{ steps.package-version.outputs.version }}
+          - 版本号: v${{ steps.package-versiondists.version }}
           - 构建时间: ${{ github.event.head_commit.timestamp }}
           
         draft: false
         prerelease: false
         files: |
-          .output/youtube-video-sender-${{ steps.package-version.outputs.version }}-chrome.zip
-          .output/youtube-video-sender-${{ steps.package-version.outputs.version }}-firefox.zip
+          dist/bili-up-extension-${{ steps.package-versiondists.version }}-chrome.zip
+          dist/bili-up-extension-${{ steps.package-versiondists.version }}-firefox.zip
         fail_on_unmatched_files: true

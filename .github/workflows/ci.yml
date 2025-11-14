@@ -45,5 +45,5 @@ jobs:
       if: github.event_name == 'push'
       with:
         name: extension-builds-${{ github.sha }}
-        path: .output/*.zip
+        path: dist/*.zip
         retention-days: 7

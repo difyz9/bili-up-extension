@@ -49,17 +49,17 @@ jobs:
     - name: List zip files
       run: |
         echo "Extension files:"
-        ls -la .output/
+        ls -la dist/
         echo "Looking for zip files:"
-        find .output -name "*.zip" -type f
+        find dist -name "*.zip" -type f
       
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ steps.package-version.outputs.version }}-npm
-        name: Release v${{ steps.package-version.outputs.version }} (NPM Build)
+        tag_name: v${{ steps.package-versiondists.version }}-npm
+        name: Release v${{ steps.package-versiondists.version }} (NPM Build)
         body: |
-          ## 🚀 Bili UP Extension v${{ steps.package-version.outputs.version }}
+          ## 🚀 Bili UP Extension v${{ steps.package-versiondists.version }}
           
           **This is a manual NPM build release**
           
@@ -76,5 +76,5 @@ jobs:
         draft: false
         prerelease: true
         files: |
-          .output/*.zip
+          dist/*.zip
         fail_on_unmatched_files: false
